@@ -104,3 +104,7 @@ These endpoints are not public
 +-----------+----------------------------------+---------------------------------------------------------+
 TODO: Child Attendance Endpoint
 ```
+
+## License
+
+Copyright (c) 2017 Trustlab Pty Ltd, under licence from Global Consent Limited. See our [License](https://github.com/TrustlabTech/ecd-platform/blob/master/LICENSE.md).
