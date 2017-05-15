@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/TrustlabTech/ecd-platform.png?label=ready&title=Ready)](https://waffle.io/TrustlabTech/ecd-platform?utm_source=badge)
 # ecd-platform
 ## ECD Platform - Laravel API
 
