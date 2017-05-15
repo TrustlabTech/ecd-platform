@@ -18,9 +18,9 @@ class Request
         $this->client = new Client([
             'base_uri' => $this->endpoint,
             'timeout' => '60.0',
-            'ssl_key' => env('TIM_CERT_LOCATION') . 'www.consent.global.key.pem',
-            'verify' => env('TIM_CERT_LOCATION') . 'thisisme_ca_bundle.pem',
-            'cert' => [ env('TIM_CERT_LOCATION') . 'www.consent.global.pem', env('TIM_CERT_PASSWD') ],
+            'ssl_key' => env('TIM_CERT_LOCATION') . env('TIM_SSL_KEY', ''),
+            'verify' => env('TIM_CERT_LOCATION') . env('TIM_CA_BUNDLE', ''),
+            'cert' => [ env('TIM_CERT_LOCATION') . env('TIM_CERT'), env('TIM_CERT_PASSWD') ],
         ]);
     }
 
