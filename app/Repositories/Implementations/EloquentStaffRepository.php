@@ -12,6 +12,7 @@ use App\Models\Staff;
 class EloquentStaffRepository extends AbstractEloquentRepository implements StaffRepositoryInterface
 {
     protected $model;
+    public $lastCreatedId;
 
     public function __construct(Staff $model)
     {
@@ -54,13 +55,15 @@ class EloquentStaffRepository extends AbstractEloquentRepository implements Staf
                 'user_id' => $user->id
             ];
 
-            if (! Staff::create($staffInfo)) {
+            $staff = Staff::create($staffInfo);
+
+            if (!$staff) {
                 $user->role()->detach($role);
                 $user->delete();
 
                 return false;
             } else {
-                return true;
+                return $staff->id;
             }
         }
 

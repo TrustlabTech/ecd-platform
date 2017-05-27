@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use GuzzleHttp;
 use Illuminate\Http\Request;
 use App\Repositories\Interfaces\CentreRepositoryInterface;
 use App\Http\Requests\Centre\StoreCentreRequest;
 use App\Http\Requests\Centre\UpdateCentreRequest;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Facades\JWTFactory;
 
 class CentreController extends Controller
 {
+    private $EISendpoint = 'http://amply-api.cloudapp.net/eis';
+
     protected $centre;
 
     public function __construct(CentreRepositoryInterface $centreRepository)
@@ -30,11 +35,40 @@ class CentreController extends Controller
 
     public function store(StoreCentreRequest $request)
     {
-        if ($this->centre->create($request->all())) {
-            return redirect()->route('centre.index')->with('info', 'Centre successfully added');
-        } else {
-            return redirect()->route('centre.index')->with('info', 'Error adding centre');
+        $resource = $this->centre->create($request->all());
+        if (!empty($resource->id)) {
+
+            $sub = -1; // us
+            $payload = JWTFactory::sub($sub)->make();
+            $token = JWTAuth::encode($payload);
+
+            $restClient = new GuzzleHttp\Client();
+
+            try {
+
+                $restClient->post($this->EISendpoint, [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                        'Authorization' => 'Bearer ' . $token
+                    ],
+                    'json' => [
+                        'id' => $resource->id,
+                        'type' => 'centre'
+                    ]
+                ]);
+
+                return redirect()->route('centre.index')->with('info', 'Centre successfully added');
+
+            } catch (\Exception $e) {
+                // if DID creation request fails, delete the resource created for consistency
+                $this->centre->delete($resource->id);
+                return redirect()->route('centre.index')->with('info', 'Error adding centre: ' . $e->getMessage());
+            }
+
         }
+
+        return redirect()->route('centre.index')->with('info', 'Error adding centre');
     }
 
     public function edit($id)

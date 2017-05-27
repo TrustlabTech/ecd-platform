@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use GuzzleHttp;
 use Illuminate\Http\Request;
 use Illuminate\Support\ViewErrorBag;
 use Illuminate\Support\MessageBag;
@@ -13,9 +14,13 @@ use App\Http\Requests\Child\UpdateChildRequest;
 use App\Http\Requests\Child\FetchByIDRequest;
 use App\Http\Requests\Child\UpdateFetchByIDRequest;
 use App\Integrations\TIM\TIM;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Facades\JWTFactory;
 
 class ChildController extends Controller
 {
+    private $EISendpoint = 'http://amply-api.cloudapp.net/eis';
+
     protected $child;
     protected $centreClass;
 
@@ -49,8 +54,36 @@ class ChildController extends Controller
 
     public function store(StoreChildRequest $request)
     {
-        if ($this->child->create($request->all())) {
-            return redirect()->route('child.index')->with('info', 'Child successfully added');
+        $resource = $this->child->create($request->all());
+        if (!empty($resource->id)) {
+
+            $sub = -1; // us
+            $payload = JWTFactory::sub($sub)->make();
+            $token = JWTAuth::encode($payload);
+
+            $restClient = new GuzzleHttp\Client();
+
+            try {
+
+                $restClient->post($this->EISendpoint, [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                        'Authorization' => 'Bearer ' . $token
+                    ],
+                    'json' => [
+                        'id' => $resource->id,
+                        'type' => 'child'
+                    ]
+                ]);
+
+                return redirect()->route('child.index')->with('info', 'Child successfully added');
+
+            } catch (\Exception $e) {
+                // if DID creation request fails, delete the resource created for consistency
+                $this->child->delete($resource->id);
+                return redirect()->route('child.index')->with('info', 'Error adding child: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('child.index')->with('info', 'Error adding child');

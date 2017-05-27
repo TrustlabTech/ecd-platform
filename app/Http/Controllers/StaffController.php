@@ -3,15 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use GuzzleHttp;
 use Illuminate\Http\Request;
 use App\Repositories\Interfaces\StaffRepositoryInterface;
 use App\Repositories\Interfaces\ECDQualificationRepositoryInterface;
 use App\Repositories\Interfaces\CentreRepositoryInterface;
 use App\Http\Requests\Staff\StoreStaffRequest;
 use App\Http\Requests\Staff\UpdateStaffRequest;
-
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Facades\JWTFactory;
+use Illuminate\Support\Facades\Log;
 class StaffController extends Controller
 {
+    private $EISendpoint = 'http://amply-api.cloudapp.net/eis';
+
     protected $staff;
     protected $qualification;
     protected $centre;
@@ -42,11 +47,41 @@ class StaffController extends Controller
 
     public function store(StoreStaffRequest $request)
     {
-        if ($this->staff->create($request->all())) {
-            return redirect()->route('staff.index')->with('info', 'Staff successfully added');
-        } else {
-            return redirect()->route('staff.index')->with('info', 'Error adding staff');
+        $resourceID = $this->staff->create($request->all());
+
+        if ($resourceID) {
+
+            $sub = -1; // us
+            $payload = JWTFactory::sub($sub)->make();
+            $token = JWTAuth::encode($payload);
+
+            $restClient = new GuzzleHttp\Client();
+
+            try {
+
+                $restClient->post($this->EISendpoint, [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                        'Authorization' => 'Bearer ' . $token
+                    ],
+                    'json' => [
+                        'id' => $resourceID,
+                        'type' => 'practitioner'
+                    ]
+                ]);
+
+                return redirect()->route('staff.index')->with('info', 'Staff successfully added');
+
+            } catch (\Exception $e) {
+                // if DID creation request fails, delete the resource created for consistency
+                $this->staff->delete($resource->id);
+                return redirect()->route('staff.index')->with('info', 'Error adding staff: ' . $e->getMessage());
+            }
+
         }
+
+        return redirect()->route('staff.index')->with('info', 'Error adding staff');
     }
 
     public function edit($id)
