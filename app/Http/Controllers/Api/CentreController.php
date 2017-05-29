@@ -20,7 +20,7 @@ class CentreController extends Controller
     {
         $this->centre = $centreRepository;
         $this->currentUser = $this->getCurrentUser();
-        $this->middleware('token.auth')->only('summary');
+        $this->middleware('token.auth')->only(['summary', 'update']);
     }
 
     public function indexByPublic()
@@ -31,5 +31,13 @@ class CentreController extends Controller
     public function summary($centreId)
     {
         return response()->json($this->centre->summaryClassesChildren($centreId));
+    }
+
+    public function update(Request $request, $id)
+    {
+        if ($this->centre->update($request->all(), $id))
+            return response()->json(['success' => 'true', 'message' => 'Centre updated successfully', 'data' => []]);
+
+        return response()->json(['success' => 'false', 'message' => 'An error occurred', 'data' => []], 422);
     }
 }

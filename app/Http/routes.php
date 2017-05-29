@@ -30,6 +30,11 @@ Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function () {
     Route::post('attendance/bulk', 'Api\ChildAttendanceController@bulk');
     Route::get('centre/{id}/summary', 'Api\CentreController@summary');
     Route::get('attendance/{centreId}/history/{year?}/{month?}', 'Api\ChildAttendanceController@history');
+
+    // update endpoints for submitting DIDs, should be called only by API v2
+    Route::patch('child/{child}', 'Api\ChildController@update');
+    Route::patch('staff/{staff}', 'Api\StaffController@update');
+    Route::patch('centre/{centre}', 'Api\CentreController@update');
 });
 
 

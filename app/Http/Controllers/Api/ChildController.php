@@ -43,4 +43,12 @@ class ChildController extends Controller
     {
         return response()->json($this->child->create($request->all()));
     }
+
+    public function update(Request $request, $childId)
+    {
+        if ($this->child->update($request->all(), $childId))
+            return response()->json(['success' => 'true', 'message' => 'Child updated successfully', 'data' => []]);
+
+        return response()->json(['success' => 'false', 'message' => 'An error occurred', 'data' => []], 422);
+    }
 }
