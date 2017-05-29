@@ -9,7 +9,7 @@ use GuzzleHttp\Exception\GuzzleException;
 class Request
 {
     private $client;
-    private $endpoint = 'https://uat.api.thisisme.com';
+    private $endpoint = 'https://uat-api.thisisme.com';
     private $headers;
 
     public function __construct()
