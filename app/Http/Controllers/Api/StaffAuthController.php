@@ -46,20 +46,21 @@ class StaffAuthController extends Controller
 
              return response()->json($response, 401);
          } else {
-             $creds = $request->only('username', 'password');
-             try {
-                 if (! $token = JWTAuth::attempt($creds)) {
-                     return response()->json(['error' => 'Invalid Credentials'], 401);
-                 }
-             } catch (JWTException $e) {
-                 return response()->json(['error' => 'Auth Token Failure'], 500);
-             }
+            $creds = $request->only('username', 'password');
+            try {
+                if (! $token = JWTAuth::attempt($creds)) {
+                    return response()->json(['error' => 'Invalid Credentials'], 401);
+                }
+            } catch (JWTException $e) {
+                return response()->json(['error' => 'Auth Token Failure'], 500);
+            }
 
-             $user = Auth::user();
-             $centreId = $user->staff->centre->id;
-             $staffCount = $user->staff->centre->staff->count();
+            $user = Auth::user();
+            $centreId = $user->staff->centre->id;
+            $staffCount = $user->staff->centre->staff->count();
 
-             $unassignedClass = CentreClass::where('name', 'SYS_UNASSIGNED')->get();
+            $graduatedClass = CentreClass::where('name', 'SYS_GRADUATED')->get();
+            $unassignedClass = CentreClass::where('name', 'SYS_UNASSIGNED')->get();
 
              $childrenCount = DB::table('children')
             ->join('centre_classes', 'children.centre_class_id', '=', 'centre_classes.id')
@@ -68,12 +69,14 @@ class StaffAuthController extends Controller
 
              $meta = [
             'staffCount' => $staffCount,
-            'childrenCount' => $childrenCount, 'unassignedClass' => $unassignedClass
+            'childrenCount' => $childrenCount,
+            'graduatedClass' => $graduatedClass,
+            'unassignedClass' => $unassignedClass
         ];
 
 
-             return response()->json(['_token' => $token, 'user' => $user->staff, 'meta' => $meta]);
-         }
+            return response()->json(['_token' => $token, 'user' => $user->staff, 'meta' => $meta]);
+        }
      }
 
     public function postRegister(Request $request)
