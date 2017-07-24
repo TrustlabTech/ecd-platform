@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\Centre;
+use App\Models\CentreClass;
 use Illuminate\Http\Request;
 use Validator;
 use App\Http\Requests;
@@ -57,6 +59,8 @@ class StaffAuthController extends Controller
              $centreId = $user->staff->centre->id;
              $staffCount = $user->staff->centre->staff->count();
 
+             $unassignedClass = CentreClass::where('name', 'SYS_UNASSIGNED')->get();
+
              $childrenCount = DB::table('children')
             ->join('centre_classes', 'children.centre_class_id', '=', 'centre_classes.id')
             ->where('centre_classes.centre_id', $centreId)
@@ -64,7 +68,7 @@ class StaffAuthController extends Controller
 
              $meta = [
             'staffCount' => $staffCount,
-            'childrenCount' => $childrenCount
+            'childrenCount' => $childrenCount, 'unassignedClass' => $unassignedClass
         ];
 
 
