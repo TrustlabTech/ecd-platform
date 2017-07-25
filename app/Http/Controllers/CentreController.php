@@ -13,7 +13,7 @@ use Tymon\JWTAuth\Facades\JWTFactory;
 
 class CentreController extends Controller
 {
-    private $EISendpoint = 'http://amply-api.cloudapp.net/eis';
+    private $EISendpoint;
 
     protected $centre;
 
@@ -21,6 +21,8 @@ class CentreController extends Controller
     {
         $this->centre = $centreRepository;
         $this->middleware('auth');
+
+        $this->EISendpoint = env('API_V2_CREATE_DID_ENDPOINT', 'http://api.amply.tech/eis');
     }
 
     public function index()

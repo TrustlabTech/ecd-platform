@@ -19,7 +19,7 @@ use Tymon\JWTAuth\Facades\JWTFactory;
 
 class ChildController extends Controller
 {
-    private $EISendpoint = 'http://amply-api.cloudapp.net/eis';
+    private $EISendpoint;
 
     protected $child;
     protected $centreClass;
@@ -31,6 +31,8 @@ class ChildController extends Controller
         $this->child = $childRepository;
         $this->centreClass = $centreClassRepository;
         $this->middleware('auth');
+
+        $this->EISendpoint = env('API_V2_CREATE_DID_ENDPOINT', 'http://api.amply.tech/eis');
     }
 
     public function index()

@@ -15,7 +15,7 @@ use Tymon\JWTAuth\Facades\JWTFactory;
 use Illuminate\Support\Facades\Log;
 class StaffController extends Controller
 {
-    private $EISendpoint = 'http://amply-api.cloudapp.net/eis';
+    private $EISendpoint;
 
     protected $staff;
     protected $qualification;
@@ -29,6 +29,8 @@ class StaffController extends Controller
         $this->qualification = $qualificationRepository;
         $this->centre = $centreRepository;
         $this->middleware('auth');
+
+        $this->EISendpoint = env('API_V2_CREATE_DID_ENDPOINT', 'http://api.amply.tech/eis');
     }
 
     public function index()
