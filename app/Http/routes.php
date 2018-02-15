@@ -37,6 +37,9 @@ Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function () {
     Route::patch('centre/{centre}', 'Api\CentreController@update');
 });
 
+// File Routes
+Route::get('/files', 'FilesController@index')->name('index');
+Route::get('getDownload/{filename}', 'FilesController@getDownload')->name('getDownload');
 
 // Laravel Application Routes
 Route::get('/', 'HomeController@index')->name('home');
