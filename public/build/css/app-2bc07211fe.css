@@ -83,3 +83,40 @@
 .select2 {
     width: 100%;
 }
+
+#fileList thead th:last-child{
+    width:30%;
+}
+
+@media all and (max-width:600px){
+    #fileList thead th:last-child{
+        width:50%;
+    }
+}
+
+.single-file.hidden {
+    display:none;
+}
+
+#search select {
+    width: 100%;
+    background: #f7f7f9;
+    border: none;
+    height: 40px;
+}
+
+#search input[type="text"]{
+    padding: 5px;
+    width: 100%;
+    max-width: 320px;
+    border-radius: 5px;
+    border: 1px solid #eceeef;
+}
+
+.no-padding-right {
+    padding-right:0;
+}
+
+.no-padding-left {
+    padding-left:0;
+}
