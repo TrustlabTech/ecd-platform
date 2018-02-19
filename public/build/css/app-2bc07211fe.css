@@ -98,6 +98,22 @@
     display:none;
 }
 
+.single-file img {
+    width:40px;
+}
+
+.single-file td:last-child {
+    text-align:center;
+}
+
+.single-file img {
+    margin:0 3px;
+}
+
+.single-file a:hover img{
+    transform: scale(1.1);
+}
+
 #search select {
     width: 100%;
     background: #f7f7f9;

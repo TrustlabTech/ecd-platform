@@ -97,8 +97,8 @@
                     ?>
                     <tr class="single-file <?php echo $pieces[1]." ".$pieces[2];?>">
                         <td><?php   echo "<p>".$filename."</p>"; ?></td>
-                        <td><?php   echo "<a href='/getDownload/".$xlsArray[$i]."' target='_blank'>XLSX</a>\r\n";
-                                    echo "<a href='/getDownload/".$pdfArray[$i]."' target='_blank'>PDF</a>\r\n";
+                        <td><?php   echo "<a href='/getDownload/".$xlsArray[$i]."' target='_blank'><img src='";?>{{ asset('img/xls.png') }}<?php echo "'/></a>\r\n";
+                                    echo "<a href='/getDownload/".$pdfArray[$i]."' target='_blank'><img src='";?>{{ asset('img/pdf.png') }}<?php echo "'/></a>\r\n";
                          ?></td>
                     </tr> 
                     <?php } ?>
