@@ -38,7 +38,7 @@ Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function () {
 });
 
 // File Routes
-Route::get('/files', 'FilesController@index')->name('index');
+Route::get('/files', 'FilesController@index')->name('files.index');
 Route::get('getDownload/{filename}', 'FilesController@getDownload')->name('getDownload');
 
 // Laravel Application Routes

@@ -34,6 +34,9 @@
                 <li class="nav-item">
                     {!! link_to_route('childAttendance.index', "Attendance", [], ['class' => 'nav-link']) !!}
                 </li>
+                <li class="nav-item">
+                    {!! link_to_route('files.index', "Files", [], ['class' => 'nav-link']) !!}
+                </li>
             @endif
 
                 <li class="nav-item float-xs-right">
@@ -43,7 +46,6 @@
                 <li class="nav-item float-xs-right">
                     {!! link_to_route('admin.index', "Admin", [], ['class' => 'nav-link']) !!}
                 </li>
-
                 <li class="nav-item dropdown float-xs-right">
                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">External</a>
                     <div class="dropdown-menu" aria-labelledby="supportedContentDropdown">
