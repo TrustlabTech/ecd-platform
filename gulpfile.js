@@ -36,6 +36,7 @@ elixir(function(mix) {
     mix.copy('resources/assets/js/gmaps.js', 'public/js/gmaps.js');
     mix.copy('resources/assets/js/select2.min.js', 'public/js/select2.min.js');
     mix.copy('resources/assets/js/attendance.js', 'public/js/attendance.js');
+    mix.copy('resources/assets/js/files.js', 'public/js/files.js');
 });
 
 // Asset versioning / cache busting
@@ -44,6 +45,7 @@ elixir(function(mix) {
         'public/css/app.css',
         'public/js/app.js',
         'public/js/gmaps.js',
-        'public/js/attendance.js'
+        'public/js/attendance.js',
+        'public/js/files.js'
     ]);
 });
