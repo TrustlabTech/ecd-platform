@@ -83,3 +83,56 @@
 .select2 {
     width: 100%;
 }
+
+#fileList thead th:last-child{
+    width:30%;
+}
+
+@media all and (max-width:600px){
+    #fileList thead th:last-child{
+        width:50%;
+    }
+}
+
+.single-file.hidden {
+    display:none;
+}
+
+.single-file img {
+    width:40px;
+}
+
+.single-file td:last-child {
+    text-align:center;
+}
+
+.single-file img {
+    margin:0 3px;
+}
+
+.single-file a:hover img{
+    transform: scale(1.1);
+}
+
+#search select {
+    width: 100%;
+    background: #f7f7f9;
+    border: none;
+    height: 40px;
+}
+
+#search input[type="text"]{
+    padding: 5px;
+    width: 100%;
+    max-width: 320px;
+    border-radius: 5px;
+    border: 1px solid #eceeef;
+}
+
+.no-padding-right {
+    padding-right:0;
+}
+
+.no-padding-left {
+    padding-left:0;
+}
