@@ -166,21 +166,62 @@ class ChildController extends Controller
     {
         $tim = new TIM();
         $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'retrieval');
-
-        if ($timResponse === false) {
+        $warningFlag = false;
+        if ($timResponse->status === "ERROR") {
             return redirect()->route('child.create')
                     ->with('danger', 'ID number not found');
         }
 
-        $data = [
-            'given_name' => ucwords(strtolower($timResponse->response->first_name)),
-            'family_name' => ucwords(strtolower($timResponse->response->surname)),
-            'gender' => strtolower($timResponse->response->gender),
-            'id_number' => $timResponse->response->identity_number,
-            'date_of_birth' => $timResponse->response->date_of_birth,
-            'citizenship' => $timResponse->response->issuing_country
-        ];
+        if ($timResponse->response->first_name !== null || $timResponse->response->first_name !== '') {
+            $data['given_name'] = ucwords(strtolower($timResponse->response->first_name));
+        } else {
+            $data['given_name'] = '';
+            $warningFlag = true;
+        }
+        if ($timResponse->response->surname !== null || $timResponse->response->surname !== '') {
+            $data['family_name'] = ucwords(strtolower($timResponse->response->surname));
+        } else {
+            $data['family_name'] = '';
+            $warningFlag = true;
+        }
+        if ($timResponse->response->gender !== null || $timResponse->response->gender !== '') {
+            $data['gender'] = ucwords(strtolower($timResponse->response->gender));
+        } else {
+            $data['gender'] = '';
+            $warningFlag = true;
+        }
+        if ($timResponse->response->identity_number !== null || $timResponse->response->identity_number !== '') {
+            $data['id_number'] = ucwords(strtolower($timResponse->response->identity_number));
+        } else {
+            $data['id_number'] = '';
+            $warningFlag = true;
+        }
+        if ($timResponse->response->date_of_birth !== null || $timResponse->response->first_name !== '') {
+            $data['date_of_birth'] = ucwords(strtolower($timResponse->response->date_of_birth));
+        } else {
+            $data['date_of_birth'] = '';
+            $warningFlag = true;
+        }
+        if ($timResponse->response->issuing_country !== null || $timResponse->response->issuing_country !== '') {
+            $data['citizenship'] = ucwords(strtolower($timResponse->response->issuing_country));
+        } else {
+            $data['citizenship'] == '';
+            $warningFlag = true;
+        }
 
+        // $data = [
+        //     'given_name' => ucwords(strtolower($timResponse->response->first_name)),
+        //     'family_name' => ucwords(strtolower($timResponse->response->surname)),
+        //     'gender' => strtolower($timResponse->response->gender),
+        //     'id_number' => $timResponse->response->identity_number,
+        //     'date_of_birth' => $timResponse->response->date_of_birth,
+        //     'citizenship' => $timResponse->response->issuing_country
+        // ];
+
+        if($warningFlag === true){
+            return redirect()->route('child.create')->withInput($data)
+                ->with('danger', 'Information fetched successfully, some fields are not filled in');
+        }
         return redirect()->route('child.create')->withInput($data)
                 ->with('info', 'Information fetched successfully');
     }
@@ -196,7 +237,7 @@ class ChildController extends Controller
         $tim = new TIM();
         $timResponse = $tim->idCheck('ZA', $request->id_number, $childId, 'vertification');
 
-        if ($timResponse === false) {
+        if ($timResponse->status === "ERROR") {
             return redirect()->route('child.index')->with('danger', 'ID number not found');
         }
 
