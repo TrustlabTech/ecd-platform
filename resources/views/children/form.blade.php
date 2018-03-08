@@ -40,6 +40,14 @@
             {!! Form::select('gender',['' => 'Please Select','female' => 'Female', 'male' => 'Male'], old('gender') !== null ? old('gender') : $child->gender, ['class' => 'form-control']) !!}
         </div>
     </div>
+
+    <div class="form-group row">
+        {!! Form::label('race', 'Race', ['class' => 'col-md-5 col-form-label']); !!}
+        <div class="col-md-7">
+            {!! Form::select('race', $races, old('race') !== null ? old('race') : $child->race, ['class' => 'form-control select2']) !!}
+        </div>
+    </div>
+
 </div>
 <div class="col-md-6">
     <div class="form-group row">
@@ -86,10 +94,4 @@
         </div>
     </div>
 
-    <div class="form-group row">
-        {!! Form::label('race', 'Race', ['class' => 'col-md-5 col-form-label']); !!}
-        <div class="col-md-7">
-            {!! Form::select('race', $races, old('race') !== null ? old('race') : $child->race, ['class' => 'form-control select2']) !!}
-        </div>
-    </div>
 </div>
