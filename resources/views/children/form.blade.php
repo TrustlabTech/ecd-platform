@@ -85,4 +85,11 @@
             {!! Form::select('centre_class_id', $centreClasses, old('centre_class_id') !== null ? old('centre_class_id') : $child->centre_class_id, ['class' => 'form-control select2']) !!}
         </div>
     </div>
+
+    <div class="form-group row">
+        {!! Form::label('race', 'Race', ['class' => 'col-md-5 col-form-label']); !!}
+        <div class="col-md-7">
+            {!! Form::select('race', $races, old('race') !== null ? old('race') : $child->race, ['class' => 'form-control select2']) !!}
+        </div>
+    </div>
 </div>

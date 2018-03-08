@@ -130,4 +130,17 @@ class EloquentChildRepository extends AbstractEloquentRepository implements Chil
     {
         return Child::all();
     }
+
+    public function allRaces()
+    {
+        // Hardcoded, since these are declared as an enum
+        // field via the AddRaceFieldToChildrenTable migration
+        return [
+            'Black' => 'Black',
+            'Coloured' => 'Coloured',
+            'White' => 'White',
+            'Indian' => 'Indian',
+            'Foreigner' => 'Foreigner'
+        ];
+    }
 }

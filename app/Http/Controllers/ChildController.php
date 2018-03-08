@@ -49,9 +49,11 @@ class ChildController extends Controller
     public function create()
     {
         $classesWithCentre = [null => 'Please Select'] + $this->centreClass->allWithCentreName();
+        $races = [null => 'Please Select'] + $this->child->allRaces();
 
         return view('children.create', ['child' => $this->child->emptyModel(),
-            'centreClasses' => $classesWithCentre]);
+            'centreClasses' => $classesWithCentre,
+            'races' => $races]);
     }
 
     public function store(StoreChildRequest $request)
@@ -94,7 +96,9 @@ class ChildController extends Controller
     public function edit($childId)
     {
         return view('children.edit', ['child' => $this->child->find($childId),
-            'centreClasses' => $this->centreClass->allWithCentreName()]);
+            'centreClasses' => $this->centreClass->allWithCentreName(),
+            'races' => [null => 'Please Select'] + $this->child->allRaces()
+        ]);
     }
 
     public function update(UpdateChildRequest $request, $childId)
