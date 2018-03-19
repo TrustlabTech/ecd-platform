@@ -135,7 +135,8 @@ class StaffController extends Controller
     public function addFetchByTIM(FetchByIDRequest $request)
     {
         $tim = new TIM();
-        $timResponse = $tim->idCheck('ZA', $request->za_id_number, null, 'retrieval');
+
+        $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'retrieval');
 
         $warningFlag = false;
 
