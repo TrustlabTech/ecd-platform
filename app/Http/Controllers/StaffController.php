@@ -138,8 +138,6 @@ class StaffController extends Controller
 
         $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'retrieval');
 
-        dd($timResponse);
-
         $warningFlag = false;
 
         if ($timResponse->status === "ERROR") {
@@ -165,7 +163,7 @@ class StaffController extends Controller
             $warningFlag = true;
         }
         if (property_exists($timResponse->response,'gender')) {
-            $data['gender'] = ucwords(strtolower($timResponse->response->gender));
+            $data['gender'] = strtolower($timResponse->response->gender);
         } else {
             $data['gender'] = '';
             $warningFlag = true;
@@ -182,10 +180,16 @@ class StaffController extends Controller
             $data['date_of_birth'] = '';
             $warningFlag = true;
         }
-        if (property_exists($timResponse->response,'issuing_country')) {
-            $data['citizenship'] = ucwords(strtolower($timResponse->response->issuing_country));
+        if (property_exists($timResponse->response,'citizenship')) {
+            $data['citizenship'] = ucwords(strtolower($timResponse->response->citizenship));
         } else {
             $data['citizenship'] == '';
+            $warningFlag = true;
+        }
+        if (property_exists($timResponse->response,'issuing_country')) {
+            $data['nationality'] = ucwords(strtolower($timResponse->response->issuing_country));
+        } else {
+            $data['nationality'] == '';
             $warningFlag = true;
         }
 
