@@ -10,7 +10,7 @@
         <div class="card">
             <div class="card-header">Add Child</div>
             <div class="card-block">
-                {!! Form::hidden('tim_id_url', route('staff.addFetchByTIM'), ['id' => 'tim_id_url']) !!}
+                {!! Form::hidden('tim_id_url', route('child.addFetchByTIM'), ['id' => 'tim_id_url']) !!}
                 {!! Form::open(['route' => 'child.store', 'method' => 'post']) !!}
                     @include('children.form')
                     <div class="col-md-12">
