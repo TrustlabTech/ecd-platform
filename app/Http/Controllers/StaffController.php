@@ -10,9 +10,12 @@ use App\Repositories\Interfaces\ECDQualificationRepositoryInterface;
 use App\Repositories\Interfaces\CentreRepositoryInterface;
 use App\Http\Requests\Staff\StoreStaffRequest;
 use App\Http\Requests\Staff\UpdateStaffRequest;
+use App\Http\Requests\Staff\FetchByIDRequest;
+use App\Integrations\TIM\TIM;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Facades\JWTFactory;
 use Illuminate\Support\Facades\Log;
+
 class StaffController extends Controller
 {
     private $EISendpoint;
@@ -165,7 +168,7 @@ class StaffController extends Controller
             $warningFlag = true;
         }
         if (property_exists($timResponse->response,'identity_number')) {
-            $data['za_id_number'] = ucwords(strtolower($timResponse->response->identity_number));
+            $data['za_id_number'] = ucwords(strtolower($timResponse->response->za_identity_number));
         } else {
             $data['za_id_number'] = '';
             $warningFlag = true;
