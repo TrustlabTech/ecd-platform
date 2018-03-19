@@ -138,6 +138,8 @@ class StaffController extends Controller
 
         $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'retrieval');
 
+        dd($timResponse);
+
         $warningFlag = false;
 
         if ($timResponse->status === "ERROR") {
