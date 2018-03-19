@@ -128,4 +128,66 @@ class StaffController extends Controller
 
         return view('staff.list', ['staff' => $staff, 'search' => true, 'phrase' => $phrase]);
     }
+
+    public function addFetchByTIM(FetchByIDRequest $request)
+    {
+        $tim = new TIM();
+        $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'retrieval');
+
+        $warningFlag = false;
+
+        if ($timResponse->status === "ERROR") {
+            return redirect()->route('staff.create')
+                    ->with('danger', 'ID number not found');
+        }
+
+        if ($timResponse->status === "PENDING") {
+            return redirect()->route('staff.create')
+                    ->with('danger', 'The result is pending (Taking too long to respond), please try again');
+        }
+
+        if (property_exists($timResponse->response,'first_name')) {
+            $data['given_name'] = ucwords(strtolower($timResponse->response->first_name));
+        } else {
+            $data['given_name'] = '';
+            $warningFlag = true;
+        }
+        if (property_exists($timResponse->response,'surname')) {
+            $data['family_name'] = ucwords(strtolower($timResponse->response->surname));
+        } else {
+            $data['family_name'] = '';
+            $warningFlag = true;
+        }
+        if (property_exists($timResponse->response,'gender')) {
+            $data['gender'] = ucwords(strtolower($timResponse->response->gender));
+        } else {
+            $data['gender'] = '';
+            $warningFlag = true;
+        }
+        if (property_exists($timResponse->response,'identity_number')) {
+            $data['za_id_number'] = ucwords(strtolower($timResponse->response->identity_number));
+        } else {
+            $data['za_id_number'] = '';
+            $warningFlag = true;
+        }
+        if (property_exists($timResponse->response,'date_of_birth')) {
+            $data['date_of_birth'] = ucwords(strtolower($timResponse->response->date_of_birth));
+        } else {
+            $data['date_of_birth'] = '';
+            $warningFlag = true;
+        }
+        if (property_exists($timResponse->response,'issuing_country')) {
+            $data['citizenship'] = ucwords(strtolower($timResponse->response->issuing_country));
+        } else {
+            $data['citizenship'] == '';
+            $warningFlag = true;
+        }
+
+        if($warningFlag === true){
+            return redirect()->route('staff.create')->withInput($data)
+                ->with('danger', 'Information fetched successfully, some fields are not filled in');
+        }
+        return redirect()->route('staff.create')->withInput($data)
+                ->with('info', 'Information fetched successfully');
+    }
 }
