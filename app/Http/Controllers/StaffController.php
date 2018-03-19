@@ -135,7 +135,7 @@ class StaffController extends Controller
     public function addFetchByTIM(FetchByIDRequest $request)
     {
         $tim = new TIM();
-        $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'retrieval');
+        $timResponse = $tim->idCheck('ZA', $request->za_id_number, null, 'retrieval');
 
         $warningFlag = false;
 
@@ -168,9 +168,9 @@ class StaffController extends Controller
             $warningFlag = true;
         }
         if (property_exists($timResponse->response,'identity_number')) {
-            $data['za_id_number'] = ucwords(strtolower($timResponse->response->za_identity_number));
+            $data['id_number'] = ucwords(strtolower($timResponse->response->za_identity_number));
         } else {
-            $data['za_id_number'] = '';
+            $data['id_number'] = '';
             $warningFlag = true;
         }
         if (property_exists($timResponse->response,'date_of_birth')) {
