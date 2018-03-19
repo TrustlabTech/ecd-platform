@@ -9,7 +9,7 @@
 </head>
 <body>
     <nav class="navbar navbar-light bg-faded">
-        <a class="navbar-brand" href="{{ URL::route('home') }}">ECD Platform</a>
+        <a class="navbar-brand" href="{{ URL::route('home') }}"><img id="logo" src="{{ asset('img/logo.png') }}" alt="ECD Platform" title="ECD Platform"/></a>
         <ul class="nav navbar-nav">
 
             @if(Auth::check())

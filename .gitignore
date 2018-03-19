@@ -1,6 +1,7 @@
 /vendor
 /node_modules
 /public/storage
+/thisisme
 storage/docs
 Homestead.yaml
 Homestead.json

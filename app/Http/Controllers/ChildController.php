@@ -168,12 +168,21 @@ class ChildController extends Controller
 
     public function addFetchByTIM(FetchByIDRequest $request)
     {
+        dd(env('TIM_CERT_LOCATION') . env('TIM_SSL_KEY', ''));
         $tim = new TIM();
         $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'retrieval');
+
         $warningFlag = false;
+        
+
         if ($timResponse->status === "ERROR") {
             return redirect()->route('child.create')
                     ->with('danger', 'ID number not found');
+        }
+
+        if ($timResponse->status === "PENDING") {
+            return redirect()->route('child.create')
+                    ->with('danger', 'The result is pending (Taking too long to respond), please try again');
         }
 
         if (property_exists($timResponse->response,'first_name')) {
