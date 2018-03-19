@@ -187,7 +187,7 @@ class StaffController extends Controller
             $warningFlag = true;
         }
         if (property_exists($timResponse->response,'issuing_country')) {
-            $data['nationality'] = ucwords(strtolower($timResponse->response->issuing_country));
+            $data['nationality'] = $timResponse->response->issuing_country;
         } else {
             $data['nationality'] == '';
             $warningFlag = true;
