@@ -17,15 +17,15 @@ class FetchByIDRequest extends Request
     public function rules()
     {
         return [
-            'id_number' => 'required|id_valid'
+            'za_id_number' => 'required|id_valid'
         ];
     }
 
     public function messages()
     {
         return [
-            'id_number.required' => 'The ID number is required.',
-            'id_number.id_valid' => 'The ID number used is not valid.',
+            'za_id_number.required' => 'The ID number is required.',
+            'za_id_number.id_valid' => 'The ID number used is not valid.',
         ];
     }
 
