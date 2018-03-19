@@ -69,6 +69,7 @@ Route::get('staff/{staff}/destroy', 'StaffController@destroy')->name('staff.dest
 Route::patch('staff/{staff}/update', 'StaffController@update')->name('staff.update');
 Route::get('staff/{staff}/edit', 'StaffController@edit')->name('staff.edit');
 Route::get('staff/search', 'StaffController@search')->name('staff.search');
+Route::post('staff/add_by_id', 'StaffController@addFetchByTIM')->name('staff.addFetchByTIM');
 
 // CentreClass Routes
 Route::get('class', 'CentreClassController@index')->name('centreClass.index');
