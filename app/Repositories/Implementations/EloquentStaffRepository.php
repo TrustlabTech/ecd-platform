@@ -37,7 +37,7 @@ class EloquentStaffRepository extends AbstractEloquentRepository implements Staf
 
             $staffInfo = [
                 'did' => $staff['did'],
-                'za_id_number' => $staff['za_id_number'],
+                'za_id_number' => $staff['id_number'],
                 'family_name' => $staff['family_name'],
                 'given_name' => $staff['given_name'],
                 'principle' => $staff['principle'],
