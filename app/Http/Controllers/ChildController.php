@@ -168,12 +168,10 @@ class ChildController extends Controller
 
     public function addFetchByTIM(FetchByIDRequest $request)
     {
-        dd(env('TIM_CERT_LOCATION') . env('TIM_SSL_KEY', ''));
         $tim = new TIM();
         $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'retrieval');
 
         $warningFlag = false;
-        
 
         if ($timResponse->status === "ERROR") {
             return redirect()->route('child.create')
