@@ -143,7 +143,7 @@ $( document ).ready(function() {
 $( document ).ready(function() {
     $('.date-pick-me').combodate({
         minYear: 1900,
-        maxYear: 2017,
+        maxYear: 2018,
         minuteStep: 10,
         format: 'YYYY-MM-DD',
         template: 'D / MMM / YYYY',
