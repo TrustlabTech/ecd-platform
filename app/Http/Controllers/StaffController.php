@@ -139,7 +139,7 @@ class StaffController extends Controller
         $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'retrieval');
 
         dd($timResponse);
-        
+
         $warningFlag = false;
 
         if ($timResponse->status === "ERROR") {
@@ -171,7 +171,7 @@ class StaffController extends Controller
             $warningFlag = true;
         }
         if (property_exists($timResponse->response,'identity_number')) {
-            $data['id_number'] = ucwords(strtolower($timResponse->response->za_identity_number));
+            $data['id_number'] = ucwords(strtolower($timResponse->response->identity_number));
         } else {
             $data['id_number'] = '';
             $warningFlag = true;
