@@ -8,9 +8,9 @@
     </div>
 
     <div class="form-group row">
-        {!! Form::label('id_number', 'ZA ID Number', ['class' => 'col-md-5 col-form-label']); !!}
+        {!! Form::label('za_id_number', 'ZA ID Number', ['class' => 'col-md-5 col-form-label']); !!}
         <div class="col-md-7">
-            {!! Form::text('id_number', old('id_number') !== null ? old('id_number') : $staff->id_number, ['class' => 'form-control']) !!}
+            {!! Form::text('za_id_number', old('za_id_number') !== null ? old('za_id_number') : $staff->za_id_number, ['class' => 'form-control']) !!}
         </div>
     </div>
 
@@ -29,7 +29,7 @@
     </div>
 
     <div class="form-group row">
-        {!! Form::label('principle', 'Principle', ['class' => 'col-md-5 col-form-label']); !!}
+        {!! Form::label('principle', 'Principal', ['class' => 'col-md-5 col-form-label']); !!}
         <div class="col-md-7">
             {!! Form::select('principle', ['1' => 'Yes', '0' => 'No'], old('principle') !== null ? old('principle') : $staff->principle, ['class' => 'form-control']) !!}
         </div>

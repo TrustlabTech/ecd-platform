@@ -10,11 +10,13 @@
         <div class="card">
             <div class="card-header">Edit Staff</div>
             <div class="card-block">
+                {!! Form::hidden('tim_id_url', route('staff.updateFetchByTIM', $staff->id), ['id' => 'tim_id_url']) !!}
                 {!! Form::open(['route' => ['staff.update', $staff->id], 'method' => 'patch']) !!}
                     @include('staff.form')
                     <div class="col-md-12">
                         {!! Form::submit('Update', ['class' => 'btn btn-primary']) !!}
                         {!! link_to_route('staff.index', "Cancel", [], ['class' => 'btn btn-secondary', 'role' => 'button']) !!}
+                        {!! Form::button('Verify', ['class' => 'btn btn-info', 'id' => 'button-tim']) !!}
                     </div>
                 {!! Form::close() !!}
             </div>

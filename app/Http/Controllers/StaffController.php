@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use GuzzleHttp;
 use Illuminate\Http\Request;
+use Illuminate\Support\ViewErrorBag;
+use Illuminate\Support\MessageBag;
 use App\Repositories\Interfaces\StaffRepositoryInterface;
 use App\Repositories\Interfaces\ECDQualificationRepositoryInterface;
 use App\Repositories\Interfaces\CentreRepositoryInterface;
 use App\Http\Requests\Staff\StoreStaffRequest;
 use App\Http\Requests\Staff\UpdateStaffRequest;
 use App\Http\Requests\Staff\FetchByIDRequest;
+use App\Http\Requests\Staff\UpdateFetchByIDRequest;
 use App\Integrations\TIM\TIM;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Facades\JWTFactory;
@@ -132,12 +135,34 @@ class StaffController extends Controller
         return view('staff.list', ['staff' => $staff, 'search' => true, 'phrase' => $phrase]);
     }
 
+    public function withoutId(Request $request)
+    {
+        return view(
+            'staff.report',
+            [
+                'staff' => $this->staff->withoutIdReport(),
+                'heading' => 'Staff without ID number'
+            ]
+        );
+    }
+
+    public function invalidId(Request $request)
+    {
+        return view(
+            'staff.report',
+            [
+                'staff' => $this->staff->invalidIdReport(),
+                'heading' => 'Staff with invalid ID number'
+            ]
+        );
+    }
+
     public function addFetchByTIM(FetchByIDRequest $request)
     {
         $tim = new TIM();
 
-        $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'retrieval');
-
+        $timResponse = $tim->idCheck('ZA', $request->za_id_number, null, 'staff', 'retrieval');
+        
         $warningFlag = false;
 
         if ($timResponse->status === "ERROR") {
@@ -169,9 +194,9 @@ class StaffController extends Controller
             $warningFlag = true;
         }
         if (property_exists($timResponse->response,'identity_number')) {
-            $data['id_number'] = ucwords(strtolower($timResponse->response->identity_number));
+            $data['za_id_number'] = ucwords(strtolower($timResponse->response->identity_number));
         } else {
-            $data['id_number'] = '';
+            $data['za_id_number'] = '';
             $warningFlag = true;
         }
         if (property_exists($timResponse->response,'date_of_birth')) {
@@ -181,7 +206,10 @@ class StaffController extends Controller
             $warningFlag = true;
         }
         if (property_exists($timResponse->response,'citizenship')) {
-            $data['citizenship'] = ucwords(strtolower($timResponse->response->citizenship));
+            if(ucwords(strtolower($timResponse->response->citizenship)) == "South African"){
+                $data['citizenship'] = "ZA";
+            }
+            // $data['citizenship'] = ucwords(strtolower($timResponse->response->citizenship));
         } else {
             $data['citizenship'] == '';
             $warningFlag = true;
@@ -199,5 +227,115 @@ class StaffController extends Controller
         }
         return redirect()->route('staff.create')->withInput($data)
                 ->with('info', 'Information fetched successfully');
+    }
+
+    public function updateFetchByTIM($staffId, UpdateFetchByIDRequest $request)
+    {
+        $staff = $this->staff->find($staffId);
+
+        if ($staff === null) {
+            return redirect()->route('staff.index');
+        }
+
+        $tim = new TIM();
+        $timResponse = $tim->idCheck('ZA', $request->za_id_number, $staffId, 'staff', 'vertification');
+        
+        if ($timResponse->status === "ERROR") {
+            return redirect()->route('staff.index')->with('danger', 'ID number not found');
+        }
+
+        $data = [];
+
+        if ($staff->given_name === null || $staff->given_name === '') {
+            $data['given_name'] = ucwords(strtolower($timResponse->response->first_name));
+        }
+
+        if ($staff->family_name === null || $staff->family_name === '') {
+            $data['family_name'] = ucwords(strtolower($timResponse->response->surname));
+        }
+
+        if ($staff->gender === null || $staff->gender === '') {
+            $data['gender'] = strtolower($timResponse->response->gender);
+        }
+
+        if ($staff->date_of_birth === null || $staff->date_of_birth === "0000-00-00") {
+            $data['date_of_birth'] = $timResponse->response->date_of_birth;
+        }
+
+        if ($staff->citizenship === null || $staff->citizenship === '') {
+            $data['citizenship'] = $timResponse->response->issuing_country;
+        }
+
+        $errorBag = new MessageBag();
+
+        if ($staff->given_name !== null && $staff->given_name !== '') {
+            if ($staff->given_name !== ucwords(strtolower($timResponse->response->first_name))) {
+                $errorBag->add('token', 'Mismatch - Given Name: <' . $staff->given_name . '> Should be: '. ucwords(strtolower($timResponse->response->first_name)));
+            }
+        }
+
+        if ($staff->family_name !== null && $staff->family_name !== '') {
+            if ($staff->family_name !== ucwords(strtolower($timResponse->response->surname))) {
+                $errorBag->add('token', 'Mismatch -  Family Name: <' . $staff->family_name . '> Should be: '. ucwords(strtolower($timResponse->response->surname)));
+            }
+        }
+
+        if ($staff->gender !== null && $staff->gender !== '') {
+            if ($staff->gender !== "0000-00-00" && $staff->gender !== strtolower($timResponse->response->gender)) {
+                $errorBag->add('token', 'Mismatch - Gender: <' . ucwords(strtolower($staff->gender)) . '> Should be: '. ucwords(strtolower($timResponse->response->gender)));
+            }
+        }
+
+        if ($staff->date_of_birth !== null && $staff->date_of_birth !== "0000-00-00") {
+            if ($staff->date_of_birth !== "0000-00-00" && $staff->date_of_birth !== $timResponse->response->date_of_birth) {
+                $errorBag->add('token', 'Mismatch - Date of Birth: <' . $staff->date_of_birth . '> Should be: '. $timResponse->response->date_of_birth);
+            }
+        }
+
+        if ($staff->citizenship !== null && $staff->citizenship !== '') {
+            if ($staff->citizenship !== null && $staff->citizenship !== $timResponse->response->issuing_country) {
+                $errorBag->add('token', 'Mismatch - Citizenship: <' . $staff->retrieveNameByCode($staff->citizenship) . '> Should be: '. $staff->retrieveNameByCode($timResponse->response->issuing_country));
+            }
+        }
+
+        $matchedBag = new MessageBag();
+
+        if ($staff->given_name === ucwords(strtolower($timResponse->response->first_name))) {
+            $matchedBag->add('token', 'Matched - Given Name');
+        }
+
+        if ($staff->family_name === ucwords(strtolower($timResponse->response->surname))) {
+            $matchedBag->add('token', 'Matched - Family Name');
+        }
+
+        if ($staff->gender === strtolower($timResponse->response->gender)) {
+            $matchedBag->add('token', 'Matched - Gender');
+        }
+
+        if ($staff->date_of_birth === $timResponse->response->date_of_birth) {
+            $matchedBag->add('token', 'Matched - Date of Birth');
+        }
+
+        if ($staff->citizenship === $timResponse->response->issuing_country) {
+            $matchedBag->add('token', 'Matched - Citizenship');
+        }
+
+        if ($errorBag->count() >= 1 && $matchedBag->count() < 1) {
+            return redirect()->route('staff.edit', ['staff' => $staff->id])->withInput($data)
+                ->with('errors', session()->get('errors', new ViewErrorBag)->put('default', $errorBag));
+        }
+
+        if ($errorBag->count() < 1 && $matchedBag->count() >= 1) {
+            return redirect()->route('staff.edit', ['staff' => $staff->id])->withInput($data)
+                ->with('successful', session()->get('successful', new ViewErrorBag)->put('default', $matchedBag));
+        }
+
+        if ($errorBag->count() >= 1 && $matchedBag->count() >= 1) {
+            return redirect()->route('staff.edit', ['staff' => $staff->id])->withInput($data)
+                ->with('errors', session()->get('errors', new ViewErrorBag)->put('default', $errorBag))
+                ->with('successful', session()->get('successful', new ViewErrorBag)->put('default', $matchedBag));
+        }
+
+        return redirect()->route('staff.edit', ['staff' => $staff->id])->withInput($data);
     }
 }

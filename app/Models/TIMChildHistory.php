@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TIMHistory extends Model
+class TIMChildHistory extends Model
 {
     protected $table = 'tim_child_history';
 

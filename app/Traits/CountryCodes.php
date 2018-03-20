@@ -7,7 +7,7 @@ trait CountryCodes
     public function getCountryCodes()
     {
         return [
-            'ZA' => 'South Africa',
+            'ZA' => 'South African',
             'AF' => 'Afghanistan',
             'AX' => 'Aland Islands',
             'AL' => 'Albania',

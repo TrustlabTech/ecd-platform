@@ -70,6 +70,7 @@ Route::patch('staff/{staff}/update', 'StaffController@update')->name('staff.upda
 Route::get('staff/{staff}/edit', 'StaffController@edit')->name('staff.edit');
 Route::get('staff/search', 'StaffController@search')->name('staff.search');
 Route::post('staff/add_by_id', 'StaffController@addFetchByTIM')->name('staff.addFetchByTIM');
+Route::post('staff/update_by_id/{staff}', 'StaffController@updateFetchByTIM')->name('staff.updateFetchByTIM');
 
 // CentreClass Routes
 Route::get('class', 'CentreClassController@index')->name('centreClass.index');

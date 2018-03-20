@@ -4,10 +4,11 @@ namespace App\Http\Requests\Staff;
 
 use App\Http\Requests\Request;
 
-class FetchByIDRequest extends Request
+class UpdateFetchByIDRequest extends Request
 {
 
-    protected $redirectRoute = 'staff.create';
+    //protected $redirectRoute = ['staff.edit', ];
+    ////https://www.neontsunami.com/posts/redirects-with-laravel-formrequests
 
     /**
     * Get the validation rules that apply to the request.

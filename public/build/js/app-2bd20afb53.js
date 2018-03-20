@@ -124,13 +124,22 @@ $( document ).ready(function() {
 
     $('#button-tim').click(function(e){
         e.preventDefault();
+
+        var idVal = $("#id_number").val();
+        var idKey = 'id_number';
+        
+        if(!idVal){
+            idVal = $("#za_id_number").val();
+            idKey = "za_id_number";
+        }
+        
         var hiddenForm = $('<form>', {
             'action': $('#tim_id_url').val(),
             'method': 'POST',
             'target': '_top'
         }).hide().append($('<input>', {
-            'name': 'id_number',
-            'value': $('#id_number').val(),
+            'name': idKey,
+            'value': idVal,
             'type': 'hidden'
         })).append($('<input>', {
             'name': '_token',

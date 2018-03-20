@@ -37,7 +37,7 @@ class EloquentStaffRepository extends AbstractEloquentRepository implements Staf
 
             $staffInfo = [
                 'did' => $staff['did'],
-                'za_id_number' => $staff['id_number'],
+                'za_id_number' => $staff['za_id_number'],
                 'family_name' => $staff['family_name'],
                 'given_name' => $staff['given_name'],
                 'principle' => $staff['principle'],
@@ -182,6 +182,31 @@ class EloquentStaffRepository extends AbstractEloquentRepository implements Staf
         $staff->user = $user;
 
         return $staff;
+    }
+
+    public function withoutIdReport()
+    {   
+        return Staff::where('za_id_number', '')
+                ->get();
+    }
+
+    public function invalidIdReport()
+    {
+        $validator = new \App\Validators\IDValidator();
+
+        $staffMembers = Staff::all();
+
+        $cstaffInvalid = [];
+
+        foreach ($staffMembers as $staff) {
+            if ($staff->za_id_number !== '') {
+                if (!$validator->externalValidate($staff->za_id_number)) {
+                    $staffInvalid[] = $staff;
+                }
+            }
+        }
+
+        return collect($staffInvalid);
     }
 
     public function externalAll()

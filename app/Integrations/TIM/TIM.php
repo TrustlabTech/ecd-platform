@@ -31,7 +31,7 @@ class TIM
         return json_decode($response->getBody());
     }
 
-    public function idCheck(string $country, string $identityNumber, $childId, string $action)
+    public function idCheck(string $country, string $identityNumber, $personId,string $personType, string $action)
     {
         $formParams = [
             'country' => $country,
@@ -44,7 +44,7 @@ class TIM
             return false;
         }
 
-        $this->database->logRequest($childId, $identityNumber, $response->getBody(), $action);
+        $this->database->logRequest($personId, $identityNumber, $response->getBody(),$personType, $action);
 
         return json_decode($response->getBody());
     }

@@ -169,7 +169,7 @@ class ChildController extends Controller
     public function addFetchByTIM(FetchByIDRequest $request)
     {
         $tim = new TIM();
-        $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'retrieval');
+        $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'child', 'retrieval');
 
         $warningFlag = false;
 
@@ -196,7 +196,7 @@ class ChildController extends Controller
             $warningFlag = true;
         }
         if (property_exists($timResponse->response,'gender')) {
-            $data['gender'] = ucwords(strtolower($timResponse->response->gender));
+            $data['gender'] = strtolower($timResponse->response->gender);
         } else {
             $data['gender'] = '';
             $warningFlag = true;
@@ -213,9 +213,12 @@ class ChildController extends Controller
             $data['date_of_birth'] = '';
             $warningFlag = true;
         }
-        if (property_exists($timResponse->response,'issuing_country')) {
-            $data['citizenship'] = ucwords(strtolower($timResponse->response->issuing_country));
-        } else {
+        if (property_exists($timResponse->response,'citizenship')) {
+            if(ucwords(strtolower($timResponse->response->citizenship)) == "South African"){
+                $data['citizenship'] = "ZA";
+            }
+        }
+        else {
             $data['citizenship'] == '';
             $warningFlag = true;
         }
@@ -237,8 +240,8 @@ class ChildController extends Controller
         }
 
         $tim = new TIM();
-        $timResponse = $tim->idCheck('ZA', $request->id_number, $childId, 'vertification');
-
+        $timResponse = $tim->idCheck('ZA', $request->id_number, $childId, 'child', 'verification');
+        
         if ($timResponse->status === "ERROR") {
             return redirect()->route('child.index')->with('danger', 'ID number not found');
         }

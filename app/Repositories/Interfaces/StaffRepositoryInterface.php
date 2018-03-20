@@ -18,6 +18,10 @@ interface StaffRepositoryInterface
 
     public function search($phrase);
 
+    public function withoutIdReport();
+
+    public function invalidIdReport();
+
     public function emptyModel();
 
     public function externalAll();
