@@ -55,6 +55,12 @@ class StaffController extends Controller
 
     public function store(StoreStaffRequest $request)
     {
+        $IDexists = $this->staff->existsbyId($request->za_id_number);
+        
+        if($IDexists) {
+            return redirect()->route('staff.create')->with('danger', 'Staff member with that ID already exists');
+        }
+
         $resourceID = $this->staff->create($request->all());
 
         if ($resourceID) {
@@ -103,6 +109,7 @@ class StaffController extends Controller
 
     public function update(UpdateStaffRequest $request, $id)
     {
+
         if ($this->staff->update($request->all(), $id)) {
             return redirect()->route('staff.index')->with('info', 'Staff successfully updated');
         } else {

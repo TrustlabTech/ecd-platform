@@ -28,6 +28,11 @@ class EloquentChildRepository extends AbstractEloquentRepository implements Chil
         return false;
     }
 
+    public function existsbyId($id)
+    {
+        return Child::where('id_number', $id)->get()->count() > 0;
+    }
+
     public function search($phrase)
     {
         $combination = preg_split('/\s+/', $phrase);

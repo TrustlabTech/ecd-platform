@@ -36,6 +36,16 @@ class ChildController extends Controller
     }
 
     /**
+     * Check if child with ID number exists
+     * @param  string $id_number
+     * @return json
+     */
+    public function existsbyId($id_number)
+    {
+        return response()->json($this->child->existsbyId($id_number));
+    }
+
+    /**
      * addChild API Endpoint
      * @param StoreChildRequest $request
      */

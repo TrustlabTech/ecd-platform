@@ -28,4 +28,15 @@ class StaffController extends Controller
 
         return response()->json(['success' => 'false', 'message' => 'An error occurred', 'data' => []], 422);
     }
+
+    /**
+     * check if staff with id number exists
+     * @param  string $id_number
+     * @return json
+     */
+
+    public function existsbyId($id_number)
+    {
+        return response()->json($this->staff->existsbyId($id_number));
+    }
 }

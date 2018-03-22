@@ -130,6 +130,11 @@ class EloquentStaffRepository extends AbstractEloquentRepository implements Staf
         return false;
     }
 
+    public function existsbyId($id)
+    {
+        return Staff::where('za_id_number', $id)->get()->count() > 0;
+    }
+
     public function search($phrase)
     {
         $combination = preg_split('/\s+/', $phrase);

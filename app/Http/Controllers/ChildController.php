@@ -58,6 +58,12 @@ class ChildController extends Controller
 
     public function store(StoreChildRequest $request)
     {
+        $IDexists = $this->child->existsbyId($request->id_number);
+
+        if($IDexists) {
+            return redirect()->route('child.create')->with('danger', 'Child with that ID already exists');
+        }
+        
         $resource = $this->child->create($request->all());
         if (!empty($resource->id)) {
 
@@ -103,6 +109,7 @@ class ChildController extends Controller
 
     public function update(UpdateChildRequest $request, $childId)
     {
+        
         if ($this->child->update($request->all(), $childId)) {
             return redirect()->route('child.index')->with('info', 'Child successfully updated');
         }

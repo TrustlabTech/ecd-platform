@@ -15,6 +15,8 @@ interface StaffRepositoryInterface
     public function update(array $staff, $id);
 
     public function delete($id);
+    
+    public function existsbyId($id);
 
     public function search($phrase);
 
