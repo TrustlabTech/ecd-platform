@@ -13,10 +13,10 @@ class TimStaffHistory extends Migration
     public function up()
     {
         Schema::create('tim_staff_history', function (Blueprint $table) {
-            $table->string('staff_id');
+            $table->unsignedInteger('staff_id')->nullable();
             $table->string('id_number');
-            $table->string('raw_response');
-            $table->string('action');
+            $table->text('raw_response');
+            $table->enum('action',['vertification','retrieval']);
             $table->timestamps();
         });
     }

@@ -17,9 +17,6 @@ class Database
                 'action' => $action
             ]);
         } else if($personType == 'staff'){
-            if($personId == null){
-                $personId = '0';
-            }
             TIMStaffHistory::create([
                 'staff_id' => $personId,
                 'id_number' => $idNumber,
