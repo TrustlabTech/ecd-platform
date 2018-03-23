@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use GuzzleHttp;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ViewErrorBag;
 use Illuminate\Support\MessageBag;
 use App\Repositories\Interfaces\ChildRepositoryInterface;
@@ -109,7 +111,23 @@ class ChildController extends Controller
 
     public function update(UpdateChildRequest $request, $childId)
     {
+
+        if($request->current_class != $request->centre_class_id){
+                $centreID = DB::table('centre_classes')->where('id',$request->centre_class_id)->value('centre_id');
+                $current_time = Carbon::now()->toDateTimeString();
         
+                DB::table('child_class_movements')->insert(
+                    ['child_id' => $childId,
+                    'centre_id' => $centreID,
+                    'class_id' => $request->centre_class_id,
+                    'prev_class_id' => $request->current_class,
+                    'created_at'=>$current_time,
+                    'updated_at'=>$current_time]
+                );
+                
+        }
+
+        $request->offsetUnset('current_class');
         if ($this->child->update($request->all(), $childId)) {
             return redirect()->route('child.index')->with('info', 'Child successfully updated');
         }
