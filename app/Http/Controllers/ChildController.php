@@ -60,12 +60,29 @@ class ChildController extends Controller
 
     public function store(StoreChildRequest $request)
     {
+        
+        // below checks for duplicates
         $IDexists = $this->child->existsbyId($request->id_number);
-
+        
         if($IDexists) {
             return redirect()->route('child.create')->with('danger', 'Child with that ID already exists');
         }
+
+        //below checks if ID is valid against national registry
+        $tim = new TIM();
+        $timResponse = $tim->idCheck('ZA', $request->za_id_number, null, 'child', 'verification');
         
+        if ($timResponse->status === "ERROR") {
+            return redirect()->route('child.create')
+                    ->with('danger', 'ID number not found');
+        }
+
+        if ($timResponse->status === "PENDING") {
+            return redirect()->route('child.create')
+                    ->with('info', 'The validation result is pending (Taking too long to respond), please try again');
+        }
+        //end of ID validations
+
         $resource = $this->child->create($request->all());
         if (!empty($resource->id)) {
 
@@ -193,10 +210,11 @@ class ChildController extends Controller
 
     public function addFetchByTIM(FetchByIDRequest $request)
     {
+        $warningFlag = false;
+
+        //below checks if ID is valid against national registry
         $tim = new TIM();
         $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'child', 'retrieval');
-
-        $warningFlag = false;
 
         if ($timResponse->status === "ERROR") {
             return redirect()->route('child.create')
@@ -207,6 +225,7 @@ class ChildController extends Controller
             return redirect()->route('child.create')
                     ->with('danger', 'The result is pending (Taking too long to respond), please try again');
         }
+        //end of ID validations
 
         if (property_exists($timResponse->response,'first_name')) {
             $data['given_name'] = ucwords(strtolower($timResponse->response->first_name));
@@ -264,12 +283,14 @@ class ChildController extends Controller
             return redirect()->route('child.index');
         }
 
+        //below checks if ID is valid against national registry
         $tim = new TIM();
         $timResponse = $tim->idCheck('ZA', $request->id_number, $childId, 'child', 'verification');
         
         if ($timResponse->status === "ERROR") {
             return redirect()->route('child.index')->with('danger', 'ID number not found');
         }
+        //end of ID validations
 
         $data = [];
 

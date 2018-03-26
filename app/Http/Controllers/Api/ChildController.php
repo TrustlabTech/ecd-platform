@@ -42,6 +42,7 @@ class ChildController extends Controller
      */
     public function existsbyId($id_number)
     {
+        dd("first one");
         return response()->json($this->child->existsbyId($id_number));
     }
 

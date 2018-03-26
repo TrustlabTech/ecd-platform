@@ -12,7 +12,7 @@
             <div class="card-block">
                 {!! Form::hidden('tim_id_url', route('staff.updateFetchByTIM', $staff->id), ['id' => 'tim_id_url']) !!}
                 {!! Form::open(['route' => ['staff.update', $staff->id], 'method' => 'patch']) !!}
-                    @include('staff.form')
+                    @include('staff.form',['editableID'=>true])
                     <div class="col-md-12">
                         {!! Form::submit('Update', ['class' => 'btn btn-primary']) !!}
                         {!! link_to_route('staff.index', "Cancel", [], ['class' => 'btn btn-secondary', 'role' => 'button']) !!}

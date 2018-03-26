@@ -55,11 +55,28 @@ class StaffController extends Controller
 
     public function store(StoreStaffRequest $request)
     {
+        
+        // below checks for duplicates
         $IDexists = $this->staff->existsbyId($request->za_id_number);
         
         if($IDexists) {
             return redirect()->route('staff.create')->with('danger', 'Staff member with that ID already exists');
         }
+
+        //below checks if ID is valid against national registry
+        $tim = new TIM();
+        $timResponse = $tim->idCheck('ZA', $request->za_id_number, null, 'staff', 'verification');
+        
+        if ($timResponse->status === "ERROR") {
+            return redirect()->route('staff.create')
+                    ->with('danger', 'ID number not found');
+        }
+
+        if ($timResponse->status === "PENDING") {
+            return redirect()->route('staff.create')
+                    ->with('info', 'The validation result is pending (Taking too long to respond), please try again');
+        }
+        //end of ID validations
 
         $resourceID = $this->staff->create($request->all());
 
@@ -165,13 +182,13 @@ class StaffController extends Controller
     }
 
     public function addFetchByTIM(FetchByIDRequest $request)
-    {
-        $tim = new TIM();
-
-        $timResponse = $tim->idCheck('ZA', $request->za_id_number, null, 'staff', 'retrieval');
-        
+    {        
         $warningFlag = false;
 
+        //below checks if ID is valid against national registry
+        $tim = new TIM();
+        $timResponse = $tim->idCheck('ZA', $request->za_id_number, null, 'staff', 'retrieval');
+        
         if ($timResponse->status === "ERROR") {
             return redirect()->route('staff.create')
                     ->with('danger', 'ID number not found');
@@ -179,8 +196,9 @@ class StaffController extends Controller
 
         if ($timResponse->status === "PENDING") {
             return redirect()->route('staff.create')
-                    ->with('danger', 'The result is pending (Taking too long to respond), please try again');
+                    ->with('info', 'The validation result is pending (Taking too long to respond), please try again');
         }
+        //end of ID validations
 
         if (property_exists($timResponse->response,'first_name')) {
             $data['given_name'] = ucwords(strtolower($timResponse->response->first_name));
