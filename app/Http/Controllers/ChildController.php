@@ -70,7 +70,7 @@ class ChildController extends Controller
 
         //below checks if ID is valid against national registry
         $tim = new TIM();
-        $timResponse = $tim->idCheck('ZA', $request->za_id_number, null, 'child', 'verification');
+        $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'child', 'verification');
         
         if ($timResponse->status === "ERROR") {
             return redirect()->route('child.create')
