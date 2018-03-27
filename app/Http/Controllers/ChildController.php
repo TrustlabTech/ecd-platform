@@ -69,17 +69,19 @@ class ChildController extends Controller
         }
 
         //below checks if ID is valid against national registry
-        $tim = new TIM();
-        $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'child', 'verification');
-        
-        if ($timResponse->status === "ERROR") {
-            return redirect()->route('child.create')
-                    ->with('danger', 'ID number not found');
-        }
+        if(!empty($request->id_number)){
+            $tim = new TIM();
+            $timResponse = $tim->idCheck('ZA', $request->id_number, null, 'child', 'verification');
+            
+            if ($timResponse->status === "ERROR") {
+                return redirect()->route('child.create')
+                        ->with('danger', 'ID number not found');
+            }
 
-        if ($timResponse->status === "PENDING") {
-            return redirect()->route('child.create')
-                    ->with('info', 'The validation result is pending (Taking too long to respond), please try again');
+            if ($timResponse->status === "PENDING") {
+                return redirect()->route('child.create')
+                        ->with('info', 'The validation result is pending (Taking too long to respond), please try again');
+            }
         }
         //end of ID validations
 
