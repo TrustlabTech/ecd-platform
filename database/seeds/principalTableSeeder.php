@@ -23,7 +23,7 @@ class PrincipalTableSeeder extends Seeder
         ]);
 
         DB::table('role_user')->insert([
-            'role_id' => '1',
+            'role_id' => '6',
             'user_id' => $id1
         ]);
     }
