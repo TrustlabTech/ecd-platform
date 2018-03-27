@@ -45,9 +45,31 @@ class User extends Authenticatable
         return $this->hasOne(Staff::class);
     }
 
+    public function principal()
+    {
+        return $this->hasOne(Principal::class);
+    }
+
+    public function practitioner()
+    {
+        return $this->hasOne(Practitioner::class);
+    }
+
     public function isAdmin()
     {
         $role = Role::where('name', 'admin')->first();
+        return $this->role->contains($role->id);
+    }
+
+    public function isPrincipal()
+    {
+        $role = Role::where('name', 'principal')->first();
+        return $this->role->contains($role->id);
+    }
+
+    public function isPractitioner()
+    {
+        $role = Role::where('name', 'practitioner')->first();
         return $this->role->contains($role->id);
     }
 
