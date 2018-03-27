@@ -41,6 +41,9 @@ class StaffController extends Controller
 
     public function index()
     {
+        if(Auth::user()->isPractitioner()){
+            return view('staff.list', ['staff' => $this->staff->paginate(5), 'search' => false]);
+        }
         return view('staff.list', ['staff' => $this->staff->paginate(100), 'search' => false]);
     }
 
