@@ -14,7 +14,7 @@
 
             @if(Auth::check())
 
-            @if(Auth::user()->isAdmin() || Auth:user()->isPractitioner())
+            @if(Auth::user()->isAdmin() || Auth::user()->isPractitioner())
                 <li class="nav-item">
                     {!! link_to_route('centre.index', "Centres", [], ['class' => 'nav-link']) !!}
                 </li>
