@@ -59,8 +59,10 @@ class StaffController extends Controller
         // below checks for duplicates
         $IDexists = $this->staff->existsbyId($request->za_id_number);
         
-        if($IDexists) {
+        if($IDexists && !empty($request->za_id_number)) {
             return redirect()->route('staff.create')->with('danger', 'Staff member with that ID already exists');
+        } else {
+
         }
 
         //below checks if ID is valid against national registry

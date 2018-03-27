@@ -64,7 +64,7 @@ class ChildController extends Controller
         // below checks for duplicates
         $IDexists = $this->child->existsbyId($request->id_number);
         
-        if($IDexists) {
+        if($IDexists && !empty($request->id_number)) {
             return redirect()->route('child.create')->with('danger', 'Child with that ID already exists');
         }
 
