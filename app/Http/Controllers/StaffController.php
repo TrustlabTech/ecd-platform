@@ -18,6 +18,7 @@ use App\Integrations\TIM\TIM;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Facades\JWTFactory;
 use Illuminate\Support\Facades\Log;
+use Auth;
 
 class StaffController extends Controller
 {
