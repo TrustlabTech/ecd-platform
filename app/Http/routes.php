@@ -26,6 +26,7 @@ Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function () {
     Route::get('class/centre/{id}', 'Api\CentreClassController@indexByCentre');
     Route::get('class/attendance/{staff_id}', 'Api\ChildAttendanceController@byClass');
     Route::get('child/class/{id}/{orderBy?}', 'Api\ChildController@byClass');
+    Route::get('child/center/{id}/{orderBy?}', 'Api\ChildController@byCenter');
     Route::get('child/{id}', 'Api\ChildController@existsById');
     Route::get('staff/{id}', 'Api\StaffController@existsById');
     Route::post('child', 'Api\ChildController@addChild');
