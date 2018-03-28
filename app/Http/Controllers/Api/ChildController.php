@@ -36,7 +36,7 @@ class ChildController extends Controller
     }
 
     /**
-     * Retrieve children by class
+     * Retrieve children by center
      * @param  string $center_id
      * @param  string $orderBy
      * @return json
