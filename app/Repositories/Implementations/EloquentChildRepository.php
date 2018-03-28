@@ -30,10 +30,11 @@ class EloquentChildRepository extends AbstractEloquentRepository implements Chil
 
     public function byCentre($id, $order) {
         if ($order === 'asc' || $order === 'desc') {
-            return Child::where('centreClass.centre.id', $id)
-                ->orderBy('given_name', $order)
-                ->orderBy('family_name', $order)
-                ->get();
+            return Child::whereHas('centreClass.centre', function ($query){
+                $query->where('id', 'like', '%' . $id . '%');
+            })->orderBy('given_name', $order)
+            ->orderBy('family_name', $order)
+            ->get();
         }
 
         return false;
