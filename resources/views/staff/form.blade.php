@@ -10,7 +10,7 @@
     <div class="form-group row">
         {!! Form::label('za_id_number', 'ZA ID Number', ['class' => 'col-md-5 col-form-label']); !!}
         <div class="col-md-7">
-            {!! Form::text('za_id_number', old('za_id_number') !== null ? old('za_id_number') : $staff->za_id_number, ['class' => 'form-control']) !!}
+            {!! Form::text('za_id_number', old('za_id_number') !== null ? old('za_id_number') : $staff->za_id_number, ['class' => 'form-control',$editableID ? 'readonly' : '']) !!}
         </div>
     </div>
 

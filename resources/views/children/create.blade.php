@@ -12,7 +12,7 @@
             <div class="card-block">
                 {!! Form::hidden('tim_id_url', route('child.addFetchByTIM'), ['id' => 'tim_id_url']) !!}
                 {!! Form::open(['route' => 'child.store', 'method' => 'post']) !!}
-                    @include('children.form')
+                    @include('children.form',['editableID'=>false])
                     <div class="col-md-12">
                         {!! Form::submit('Create', ['class' => 'btn btn-primary']) !!}
                         {!! link_to_route('child.index', "Cancel", [], ['class' => 'btn btn-secondary', 'role' => 'button']) !!}

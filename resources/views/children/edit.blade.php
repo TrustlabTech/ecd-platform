@@ -13,7 +13,7 @@
                 {!! Form::hidden('tim_id_url', route('child.updateFetchByTIM', $child->id), ['id' => 'tim_id_url']) !!}
                 {!! Form::open(['route' => ['child.update', $child->id], 'method' => 'patch']) !!}
                     {{ Form::hidden('current_class', $child->centre_class_id) }}
-                    @include('children.form')
+                    @include('children.form',['editableID'=>true])
                     <div class="col-md-12">
                         {!! Form::submit('Update', ['class' => 'btn btn-primary']) !!}
                         {!! link_to_route('child.index', "Cancel", [], ['class' => 'btn btn-secondary', 'role' => 'button']) !!}
