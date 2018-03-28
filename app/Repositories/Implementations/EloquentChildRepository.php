@@ -28,6 +28,17 @@ class EloquentChildRepository extends AbstractEloquentRepository implements Chil
         return false;
     }
 
+    public function byCenter($id, $order) {
+        if ($order === 'asc' || $order === 'desc') {
+            return Child::where('centreClass.center.id', $id)
+                ->orderBy('given_name', $order)
+                ->orderBy('family_name', $order)
+                ->get();
+        }
+
+        return false;
+    }
+
     public function existsbyId($id)
     {
         return Child::where('id_number', $id)->get()->count() > 0;
