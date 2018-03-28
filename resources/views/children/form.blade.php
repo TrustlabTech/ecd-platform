@@ -5,11 +5,11 @@
             {!! Form::text('did', old('did') !== null ? old('did') : $child->did, ['class' => 'form-control']) !!}
         </div>
     </div>
-
+    {{-- add this on line 13 after 'form-control',($editableID && !empty($child->id_number)) ? 'readonly' : '' }}
     <div class="form-group row">
         {!! Form::label('id_number', 'ID Number', ['class' => 'col-md-5 col-form-label']); !!}
         <div class="col-md-7">
-            {!! Form::text('id_number', old('id_number') !== null ? old('id_number') : $child->id_number, ['class' => 'form-control',($editableID && !empty($child->id_number)) ? 'readonly' : '']) !!}
+            {!! Form::text('id_number', old('id_number') !== null ? old('id_number') : $child->id_number, ['class' => 'form-control']) !!}
         </div>
     </div>
 
