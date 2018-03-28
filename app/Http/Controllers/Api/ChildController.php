@@ -41,9 +41,9 @@ class ChildController extends Controller
      * @param  string $orderBy
      * @return json
      */
-    public function byCenter($center_id, $orderBy = "asc")
+    public function byCentre($centre_id, $orderBy = "asc")
     {
-        return response()->json($this->child->byCenter($center_id, $orderBy));
+        return response()->json($this->child->byCentre($centre_id, $orderBy));
     }
 
     /**
