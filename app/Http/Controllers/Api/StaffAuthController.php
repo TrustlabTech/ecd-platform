@@ -75,7 +75,7 @@ class StaffAuthController extends Controller
         ];
 
 
-            return response()->json(['_token' => $token, 'user' => $user->staff, 'meta' => $meta,'expires_in' => 72 * 60 * 60]);
+            return response()->json(['_token' => $token, 'user' => $user->staff, 'meta' => $meta]);
         }
      }
 
