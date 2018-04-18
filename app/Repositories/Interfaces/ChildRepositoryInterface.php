@@ -18,7 +18,7 @@ interface ChildRepositoryInterface
 
     public function byClass($id, $order);
 
-    public function byCenter($id, $order);
+    public function byCentre($id, $order);
 
     public function existsbyId($id);
 
