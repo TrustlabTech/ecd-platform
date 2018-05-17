@@ -94,8 +94,7 @@ class EloquentChildAttendanceRepository extends AbstractEloquentRepository imple
         } catch (ErrorException $ex) {
             return ['error' => 'attendance structure invalid'];
         }
-
-        return true;
+        return ['success' => 'attendance added succesfully'];;
     }
 
     public function attendanceToday()
