@@ -16,6 +16,7 @@
                 <th>Date</th>
                 <th>Child</th>
                 <th>Class</th>
+                <th>Centre</th>
                 <th>Attended</th>
                 <th>#</th>
             </thead>
@@ -26,6 +27,7 @@
                     <td>{{$attendance->created_at}}</td>
                     <td>{{$attendance->children->given_name}} {{$attendance->children->family_name}}</td>
                     <td>{{$attendance->children->centreClass->name}}</td>
+                    <td>{{$attendance->children->centreClass->centre->name}}</td>
                     <td>{{$attendance->attended === 0 ? "No" : "Yes"}}</td>
                     <td>
                         {!! link_to_route('childAttendance.edit', "Edit", ['childAttendance' => $attendance->id], ['class' => 'btn btn-info btn-sm', 'role' => 'button']) !!}

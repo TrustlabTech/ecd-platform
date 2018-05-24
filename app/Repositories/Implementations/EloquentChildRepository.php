@@ -20,7 +20,7 @@ class EloquentChildRepository extends AbstractEloquentRepository implements Chil
     {
         if ($order === 'asc' || $order === 'desc') {
             return Child::where('centre_class_id', $id)
-                ->orderBy('given_name', $order)
+                // ->orderBy('given_name', $order)
                 ->orderBy('family_name', $order)
                 ->get();
         }

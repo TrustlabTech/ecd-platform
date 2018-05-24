@@ -33,7 +33,13 @@ class ChildAttendanceController extends Controller
 
     public function bulk(Request $request)
     {
-        return response()->json($this->childAttendance->byBatch($request->all()));
+        $res = $this->childAttendance->byBatch($request->all());
+        if (array_key_exists('error', $res)) {
+            return response()->json([$res['error']],400);
+        } else {
+            return response()->json([$res],200);
+        }
+        
     }
 
     public function history($centreId, $year = 0, $month = 0)
