@@ -46,9 +46,9 @@ class BackfillMissingDID extends Command
     {
         $this->info("Finding missing DIDs");
 
-        $this->info("[child] Missing: " . Child::whereNull('did')->count());
-        $this->info("[centre] Missing: " . Centre::whereNull('did')->count());
-        $this->info("[practitioner] Missing: " . Staff::whereNull('did')->count());
+        $this->info("[child] Missing: " . Child::where('did', '')->count());
+        $this->info("[centre] Missing: " . Centre::where('did', '')->count());
+        $this->info("[practitioner] Missing: " . Staff::where('did', '')->count());
 
         $this->info('');
 
@@ -56,13 +56,13 @@ class BackfillMissingDID extends Command
         {
             $this->info("--confirm switch on, starting sync.");
 
-            foreach(Child::whereNull('did')->get() as $res)
+            foreach(Child::where('did', '')->get() as $res)
                 $this->post($res->id, 'child');
 
-            foreach(Centre::whereNull('did')->get() as $res)
+            foreach(Centre::where('did', '')->get() as $res)
                 $this->post($res->id, 'centre');
 
-            foreach(Staff::whereNull('did')->get() as $res)
+            foreach(Staff::where('did', '')->get() as $res)
                 $this->post($res->id, 'practitioner');
         }
         else
