@@ -3,7 +3,7 @@ $( document ).ready(function() {
 
     $('.date-pick-me').combodate({
         minYear: 1975,
-        maxYear: 2018,
+        maxYear: 2020,
         minuteStep: 10,
         format: 'YYYY-MM-DD',
         template: 'D / MMM / YYYY',
